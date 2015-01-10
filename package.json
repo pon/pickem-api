@@ -1,0 +1,19 @@
+{
+  "name": "pickem-api",
+  "version": "0.0.0",
+  "description": "API for College Pick Em'",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pon/pickem-api.git"
+  },
+  "author": "Peter Nagel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pon/pickem-api/issues"
+  },
+  "homepage": "https://github.com/pon/pickem-api"
+}
