@@ -2,7 +2,7 @@
   "name": "pickem-api",
   "version": "0.0.0",
   "description": "API for College Pick Em'",
-  "main": "server.js",
+  "main": "app/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/pon/pickem-api/issues"
   },
-  "homepage": "https://github.com/pon/pickem-api"
+  "homepage": "https://github.com/pon/pickem-api",
+  "dependencies": {
+    "hapi": "^8.1.0",
+    "joi": "^5.1.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-load-plugins": "^0.8.0",
+    "gulp-nodemon": "^1.0.5"
+  }
 }
