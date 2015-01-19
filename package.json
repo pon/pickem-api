@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/pon/pickem-api",
   "dependencies": {
+    "bluebird": "^2.8.0",
     "hapi": "^8.1.0",
     "hapi-bookshelf-models": "^1.0.2",
     "joi": "^5.1.0",

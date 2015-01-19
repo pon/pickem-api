@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './pickem.sqlite3'
+      filename: path.join(__dirname, '/pickem_dev.sqlite3')
     },
     migrations: {
       directory: path.join(__dirname, '/migrations'),
@@ -13,18 +13,13 @@ module.exports = {
     }
   },
   production: {
-    client: 'postgresql',
+    client: 'sqlite3',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
+      filename: path.join(__dirname, '/pickem_prod.sqlite3')
     },
     migrations: {
-      tableName: 'knex_migrations'
+      directory: path.join(__dirname, '/migrations'),
+      tableName: 'migrations'
     }
-  }
+  },
 };

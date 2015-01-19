@@ -1,0 +1,502 @@
+[
+  {
+    "id": 87,
+    "name": "Air Force Falcons"
+  },
+  {
+    "id": 47,
+    "name": "Akron Zips"
+  },
+  {
+    "id": 73,
+    "name": "Alabama Crimson Tide"
+  },
+  {
+    "id": 58,
+    "name": "Arizona State Sun Devils"
+  },
+  {
+    "id": 57,
+    "name": "Arizona Wildcats"
+  },
+  {
+    "id": 74,
+    "name": "Arkansas Razorbacks"
+  },
+  {
+    "id": 37,
+    "name": "Arkansas State Red Wolves"
+  },
+  {
+    "id": 97,
+    "name": "Army Black Knights"
+  },
+  {
+    "id": 75,
+    "name": "Auburn Tigers"
+  },
+  {
+    "id": 48,
+    "name": "Ball State Cardinals"
+  },
+  {
+    "id": 79,
+    "name": "Baylor Bears"
+  },
+  {
+    "id": 112,
+    "name": "Boise State Broncos"
+  },
+  {
+    "id": 10,
+    "name": "Boston College Eagles"
+  },
+  {
+    "id": 49,
+    "name": "Bowling Green Falcons"
+  },
+  {
+    "id": 208,
+    "name": "Buffalo Bulls"
+  },
+  {
+    "id": 88,
+    "name": "BYU Cougars"
+  },
+  {
+    "id": 59,
+    "name": "California Golden Bears"
+  },
+  {
+    "id": 50,
+    "name": "Central Michigan Chippewas"
+  },
+  {
+    "id": 98,
+    "name": "Cincinnati Bearcats"
+  },
+  {
+    "id": 1,
+    "name": "Clemson Tigers"
+  },
+  {
+    "id": 18,
+    "name": "Colorado Buffaloes"
+  },
+  {
+    "id": 89,
+    "name": "Colorado State Rams"
+  },
+  {
+    "id": 202,
+    "name": "Connecticut Huskies"
+  },
+  {
+    "id": 2,
+    "name": "Duke Blue Devils"
+  },
+  {
+    "id": 99,
+    "name": "East Carolina Pirates"
+  },
+  {
+    "id": 51,
+    "name": "Eastern Michigan Eagles"
+  },
+  {
+    "id": 2307,
+    "name": "FIU Golden Panthers"
+  },
+  {
+    "id": 2294,
+    "name": "Florida Atlantic Owls"
+  },
+  {
+    "id": 67,
+    "name": "Florida Gators"
+  },
+  {
+    "id": 3,
+    "name": "Florida State Seminoles"
+  },
+  {
+    "id": 90,
+    "name": "Fresno State Bulldogs"
+  },
+  {
+    "id": 68,
+    "name": "Georgia Bulldogs"
+  },
+  {
+    "id": 2558,
+    "name": "Georgia State Panthers"
+  },
+  {
+    "id": 4,
+    "name": "Georgia Tech Yellow Jackets"
+  },
+  {
+    "id": 91,
+    "name": "Hawaii Rainbow Warriors"
+  },
+  {
+    "id": 80,
+    "name": "Houston Cougars"
+  },
+  {
+    "id": 114,
+    "name": "Idaho Vandals"
+  },
+  {
+    "id": 26,
+    "name": "Illinois Fighting Illini"
+  },
+  {
+    "id": 27,
+    "name": "Indiana Hoosiers"
+  },
+  {
+    "id": 28,
+    "name": "Iowa Hawkeyes"
+  },
+  {
+    "id": 19,
+    "name": "Iowa State Cyclones"
+  },
+  {
+    "id": 20,
+    "name": "Kansas Jayhawks"
+  },
+  {
+    "id": 21,
+    "name": "Kansas State Wildcats"
+  },
+  {
+    "id": 52,
+    "name": "Kent State Golden Flashes"
+  },
+  {
+    "id": 69,
+    "name": "Kentucky Wildcats"
+  },
+  {
+    "id": 45,
+    "name": "Louisiana Ragin' Cajuns"
+  },
+  {
+    "id": 38,
+    "name": "Louisiana Tech Bulldogs"
+  },
+  {
+    "id": 103,
+    "name": "Louisiana-Monroe Warhawks"
+  },
+  {
+    "id": 100,
+    "name": "Louisville Cardinals"
+  },
+  {
+    "id": 76,
+    "name": "LSU Tigers"
+  },
+  {
+    "id": 176,
+    "name": "Marshall Thundering Herd"
+  },
+  {
+    "id": 5,
+    "name": "Maryland Terrapins"
+  },
+  {
+    "id": 204,
+    "name": "Massachusetts Minutemen"
+  },
+  {
+    "id": 101,
+    "name": "Memphis Tigers"
+  },
+  {
+    "id": 11,
+    "name": "Miami (FL) Hurricanes"
+  },
+  {
+    "id": 53,
+    "name": "Miami (OH) RedHawks"
+  },
+  {
+    "id": 30,
+    "name": "Michigan State Spartans"
+  },
+  {
+    "id": 29,
+    "name": "Michigan Wolverines"
+  },
+  {
+    "id": 152,
+    "name": "Middle Tennessee Blue Raiders"
+  },
+  {
+    "id": 31,
+    "name": "Minnesota Golden Gophers"
+  },
+  {
+    "id": 78,
+    "name": "Mississippi State Bulldogs"
+  },
+  {
+    "id": 22,
+    "name": "Missouri Tigers"
+  },
+  {
+    "id": 102,
+    "name": "Navy Midshipmen"
+  },
+  {
+    "id": 23,
+    "name": "Nebraska Cornhuskers"
+  },
+  {
+    "id": 39,
+    "name": "Nevada Wolf Pack"
+  },
+  {
+    "id": 92,
+    "name": "New Mexico Lobos"
+  },
+  {
+    "id": 41,
+    "name": "New Mexico State Aggies"
+  },
+  {
+    "id": 7,
+    "name": "North Carolina State Wolfpack"
+  },
+  {
+    "id": 6,
+    "name": "North Carolina Tar Heels"
+  },
+  {
+    "id": 182,
+    "name": "North Texas Mean Green"
+  },
+  {
+    "id": 42,
+    "name": "Northern Illinois Huskies"
+  },
+  {
+    "id": 32,
+    "name": "Northwestern Wildcats"
+  },
+  {
+    "id": 104,
+    "name": "Notre Dame Fighting Irish"
+  },
+  {
+    "id": 54,
+    "name": "Ohio Bobcats"
+  },
+  {
+    "id": 33,
+    "name": "Ohio State Buckeyes"
+  },
+  {
+    "id": 24,
+    "name": "Oklahoma Sooners"
+  },
+  {
+    "id": 25,
+    "name": "Oklahoma State Cowboys"
+  },
+  {
+    "id": 77,
+    "name": "Ole Miss Rebels"
+  },
+  {
+    "id": 60,
+    "name": "Oregon Ducks"
+  },
+  {
+    "id": 61,
+    "name": "Oregon State Beavers"
+  },
+  {
+    "id": 34,
+    "name": "Penn State Nittany Lions"
+  },
+  {
+    "id": 12,
+    "name": "Pittsburgh Panthers"
+  },
+  {
+    "id": 35,
+    "name": "Purdue Boilermakers"
+  },
+  {
+    "id": 81,
+    "name": "Rice Owls"
+  },
+  {
+    "id": 13,
+    "name": "Rutgers Scarlet Knights"
+  },
+  {
+    "id": 93,
+    "name": "San Diego State Aztecs"
+  },
+  {
+    "id": 44,
+    "name": "San Jose State Spartans"
+  },
+  {
+    "id": 82,
+    "name": "SMU Mustangs"
+  },
+  {
+    "id": 2549,
+    "name": "South Alabama Jaguars"
+  },
+  {
+    "id": 70,
+    "name": "South Carolina Gamecocks"
+  },
+  {
+    "id": 1019,
+    "name": "South Florida Bulls"
+  },
+  {
+    "id": 105,
+    "name": "Southern Miss Golden Eagles"
+  },
+  {
+    "id": 63,
+    "name": "Stanford Cardinal"
+  },
+  {
+    "id": 14,
+    "name": "Syracuse Orange"
+  },
+  {
+    "id": 85,
+    "name": "TCU Horned Frogs"
+  },
+  {
+    "id": 15,
+    "name": "Temple Owls"
+  },
+  {
+    "id": 71,
+    "name": "Tennessee Volunteers"
+  },
+  {
+    "id": 84,
+    "name": "Texas A&amp;M Aggies"
+  },
+  {
+    "id": 83,
+    "name": "Texas Longhorns"
+  },
+  {
+    "id": 185,
+    "name": "Texas State Bobcats"
+  },
+  {
+    "id": 86,
+    "name": "Texas Tech Red Raiders"
+  },
+  {
+    "id": 55,
+    "name": "Toledo Rockets"
+  },
+  {
+    "id": 222,
+    "name": "Troy Trojans"
+  },
+  {
+    "id": 106,
+    "name": "Tulane Green Wave"
+  },
+  {
+    "id": 107,
+    "name": "Tulsa Golden Hurricane"
+  },
+  {
+    "id": 207,
+    "name": "UAB Blazers"
+  },
+  {
+    "id": 210,
+    "name": "UCF Knights"
+  },
+  {
+    "id": 64,
+    "name": "UCLA Bruins"
+  },
+  {
+    "id": 40,
+    "name": "UNLV Rebels"
+  },
+  {
+    "id": 62,
+    "name": "USC Trojans"
+  },
+  {
+    "id": 46,
+    "name": "Utah State Aggies"
+  },
+  {
+    "id": 94,
+    "name": "Utah Utes"
+  },
+  {
+    "id": 95,
+    "name": "UTEP Miners"
+  },
+  {
+    "id": 2560,
+    "name": "UTSA Roadrunners"
+  },
+  {
+    "id": 72,
+    "name": "Vanderbilt Commodores"
+  },
+  {
+    "id": 8,
+    "name": "Virginia Cavaliers"
+  },
+  {
+    "id": 16,
+    "name": "Virginia Tech Hokies"
+  },
+  {
+    "id": 9,
+    "name": "Wake Forest Demon Deacons"
+  },
+  {
+    "id": 65,
+    "name": "Washington Huskies"
+  },
+  {
+    "id": 66,
+    "name": "Washington State Cougars"
+  },
+  {
+    "id": 17,
+    "name": "West Virginia Mountaineers"
+  },
+  {
+    "id": 224,
+    "name": "Western Kentucky Hilltoppers"
+  },
+  {
+    "id": 56,
+    "name": "Western Michigan Broncos"
+  },
+  {
+    "id": 36,
+    "name": "Wisconsin Badgers"
+  },
+  {
+    "id": 96,
+    "name": "Wyoming Cowboys"
+  }
+]
