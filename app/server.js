@@ -3,18 +3,13 @@ var Hapi    = require('hapi');
 var path    = require('path');
 var server  = new Hapi.Server();
 
-server.connection(config.server);
+server.connection(config);
 
 server.register([
   {
     register: require('hapi-bookshelf-models'),
     options: {
-      knex: {
-        client: 'sqlite3',
-        connection: {
-          filename: './pickem.sqlite3'
-        }
-      },
+      knex: require('../db/knexfile').development,
       plugins: ['registry'],
       models: path.join(__dirname, '/models'),
       base: function (bookshelf) {
@@ -23,7 +18,8 @@ server.register([
         });
       }
     }
-  }
+  },
+  { register: require('./plugins/features/teams') }
 ], function (err) {
   if (err) { throw err; }
 });
