@@ -18,11 +18,14 @@
   "homepage": "https://github.com/pon/pickem-api",
   "dependencies": {
     "hapi": "^8.1.0",
-    "joi": "^5.1.0"
+    "hapi-bookshelf-models": "^1.0.2",
+    "joi": "^5.1.0",
+    "knex": "^0.7.3"
   },
   "devDependencies": {
     "gulp": "^3.8.10",
     "gulp-load-plugins": "^0.8.0",
-    "gulp-nodemon": "^1.0.5"
+    "gulp-nodemon": "^1.0.5",
+    "sqlite3": "^3.0.4"
   }
 }
