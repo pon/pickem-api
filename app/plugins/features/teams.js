@@ -12,10 +12,7 @@ exports.register = function (server, options, next) {
         return reply(new Team().query(function (query) {
           query
             .orderBy('name', 'asc');
-        }).fetchAll()
-        .then(function (teams) {
-          return teams.toJSON();
-        }));
+        }).fetchAll());
       }
     }
   }, {
@@ -26,7 +23,7 @@ exports.register = function (server, options, next) {
         return reply(new Team({ id: request.params.id })
         .fetch({ require: true })
         .then(function (team) {
-          return team.toJSON();
+          return team;
         })
         .catch(function (err) {
           return Boom.notFound('team could not be found');
@@ -34,6 +31,8 @@ exports.register = function (server, options, next) {
       }
     }
   }]);
+
+  next();
 };
 
 exports.register.attributes = {

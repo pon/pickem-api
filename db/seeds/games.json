@@ -1,0 +1,13 @@
+[
+  {
+    "week_id": 1,
+    "home_team_id": 1,
+    "away_team_id": 2,
+    "neutral_site": false,
+    "site": "Stadium",
+    "start_time": "9/1/2014",
+    "spread": 0,
+    "created_at": "9/1/2014",
+    "updated_at": "9/1/2014"
+  }
+]

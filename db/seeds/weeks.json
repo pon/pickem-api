@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Test Week 1",
+    "open_date": "9/1/2014",
+    "close_date": "9/8/2014",
+    "created_at": "9/1/2014",
+    "updated_at": "9/1/2014"
+  },
+  {
+    "name": "Test Week 2",
+    "open_date": "9/9/2014",
+    "close_date": "9/16/2014",
+    "created_at": "9/8/2014",
+    "updated_at": "9/8/2014"
+  }
+]

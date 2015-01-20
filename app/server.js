@@ -7,6 +7,12 @@ server.connection(config);
 
 server.register([
   {
+    register: require('./plugins/services/serializer'),
+    options: {
+      directory: path.join(__dirname, '/serializers')
+    }
+  },
+  {
     register: require('hapi-bookshelf-models'),
     options: {
       knex: require('../db/knexfile').development,
@@ -19,7 +25,8 @@ server.register([
       }
     }
   },
-  { register: require('./plugins/features/teams') }
+  { register: require('./plugins/features/teams') },
+  { register: require('./plugins/features/weeks') }
 ], function (err) {
   if (err) { throw err; }
 });
