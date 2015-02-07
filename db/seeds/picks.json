@@ -4,6 +4,8 @@
     "user_id": 1,
     "winning_team_id": 1,
     "losing_team_id": 2,
-    "best_bet": 0
+    "best_bet": 0,
+    "updated_at": "2/1/2015",
+    "created_at": "2/1/2015"
   }
 ]

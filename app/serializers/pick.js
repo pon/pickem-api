@@ -8,5 +8,7 @@ module.exports = {
   winning_team: team,
   losing_team: team,
   best_bet: Joi.number().integer().required(),
+  created_at: Joi.date().required(),
+  updated_at: Joi.date().required(),
   object: Joi.string().optional().default('pick')
 };

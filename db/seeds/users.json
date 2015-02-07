@@ -3,6 +3,8 @@
     "first_name": "Peter",
     "last_name": "Nagel",
     "email": "pnagel5@gmail.com",
-    "password": "password_hash"
+    "password": "password_hash",
+    "updated_at": "2/1/2015",
+    "created_at": "2/1/2015"
   }
 ]

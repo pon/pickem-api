@@ -18,12 +18,15 @@
   },
   "homepage": "https://github.com/pon/pickem-api",
   "dependencies": {
+    "bcrypt": "^0.8.1",
     "bluebird": "^2.8.0",
     "bookshelf": "^0.7.9",
     "boom": "^2.6.1",
     "hapi": "^8.1.0",
+    "hapi-auth-jwt": "^2.0.0",
     "hapi-bookshelf-models": "^1.0.2",
     "joi": "^5.1.0",
+    "jsonwebtoken": "^3.2.2",
     "knex": "^0.7.3"
   },
   "devDependencies": {

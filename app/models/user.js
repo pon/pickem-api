@@ -1,5 +1,6 @@
 module.exports = function (bookshelf) {
   return bookshelf.extend({
-    tableName: 'users'
+    tableName: 'users',
+    serializer: 'user'
   });
 };
