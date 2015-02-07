@@ -26,7 +26,8 @@ server.register([
     }
   },
   { register: require('./plugins/features/teams') },
-  { register: require('./plugins/features/weeks') }
+  { register: require('./plugins/features/weeks') },
+  { register: require('./plugins/features/games') }
 ], function (err) {
   if (err) { throw err; }
 });
