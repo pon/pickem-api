@@ -20,7 +20,7 @@ server.connection(config);
 
 server.register([
   {
-    register: require('./plugins/services/serializer'),
+    register: require('hapi-bookshelf-serializer'),
     options: {
       directory: path.join(__dirname, '/serializers')
     }

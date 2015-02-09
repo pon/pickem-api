@@ -10,5 +10,6 @@ module.exports = {
   start_time: Joi.date().required(),
   spread: Joi.number().required(),
   created_at: Joi.date().required(),
-  updated_at: Joi.date().required()
+  updated_at: Joi.date().required(),
+  object: Joi.string().optional().default('game')
 };
