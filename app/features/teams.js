@@ -3,16 +3,28 @@ var Boom        = require('boom');
 var Joi         = require('joi');
 
 exports.register = function (server, options, next) {
+
   var Team = server.plugins.bookshelf.model('Team');
+
+  server.method('teams.findAll', function () {
+    return new Team().query(function (query) {
+      query.orderBy('name', 'asc');
+    })
+    .fetchAll();
+  });
+
+  server.method('teams.findById', function (id) {
+    return new Team({ id: id })
+    .fetch({ require: true })
+    .catch(function (err) { return Boom.notFound('team could not be found'); });
+  });
+
   server.route([{
     method: 'GET',
     path: '/teams',
     config: {
       handler: function (request, reply) {
-        return reply(new Team().query(function (query) {
-          query
-            .orderBy('name', 'asc');
-        }).fetchAll());
+        reply(server.methods.teams.findAll());
       }
     }
   }, {
@@ -20,14 +32,7 @@ exports.register = function (server, options, next) {
     path: '/teams/{id}',
     config: {
       handler: function (request, reply) {
-        return reply(new Team({ id: request.params.id })
-        .fetch({ require: true })
-        .then(function (team) {
-          return team;
-        })
-        .catch(function (err) {
-          return Boom.notFound('team could not be found');
-        }));
+        reply(server.methods.teams.findById(request.params.id));
       }
     }
   }]);
