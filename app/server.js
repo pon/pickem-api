@@ -19,12 +19,7 @@ var server = new Hapi.Server({
 server.connection(config);
 
 server.register([
-  {
-    register: require('hapi-bookshelf-serializer'),
-    options: {
-      directory: path.join(__dirname, '/serializers')
-    }
-  },
+  require('./services/serialize'),
   {
     register: require('hapi-bookshelf-models'),
     options: {
@@ -38,12 +33,12 @@ server.register([
       }
     }
   },
-  { register: require('./plugins/services/authentication') },
-  { register: require('./plugins/features/teams') },
-  { register: require('./plugins/features/weeks') },
-  { register: require('./plugins/features/games') },
-  { register: require('./plugins/features/picks') },
-  { register: require('./plugins/features/users') }
+  { register: require('./features/users') },
+  { register: require('./services/authentication') },
+  { register: require('./features/teams') },
+  { register: require('./features/weeks') },
+  { register: require('./features/games') },
+  { register: require('./features/picks') }
 ], function (err) {
   if (err) { throw err; }
 });
