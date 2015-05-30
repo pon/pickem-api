@@ -4,17 +4,75 @@ var Joi         = require('joi');
 
 exports.register = function (server, options, next) {
   var Game = server.plugins.bookshelf.model('Game');
-  var Team = server.plugins.bookshelf.model('Team');
-  var Week = server.plugins.bookshelf.model('Week');
+
+  server.method('games.findAll', function (next) {
+    var promise = new Game().fetchAll({ withRelated: ['home_team', 'away_team'] });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
+  server.method('games.findById', function (id, next) {
+    var promise = new Game({ id: id })
+    .fetch({ require: true, withRelated: ['home_team', 'away_team'] })
+    .catch(function (err) { throw Boom.notFound('game could not be found'); });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
+  server.method('games.create', function (payload, next) {
+    var promise = new Game().save({
+      neutral_site: payload.neutral_site,
+      site: payload.site,
+      start_time: payload.start_time,
+      spread: payload.spread,
+      home_team_id: payload.home_team.id,
+      away_team_id: payload.away_team.id,
+      week_id: payload.week.id
+    })
+    .then(function (game) {
+      return game.load([ 'home_team', 'away_team' ]);
+    });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
+  server.method('games.update', function (game, payload, next) {
+    var promise = Bluebird.all([
+      server.methods.teams.findById(payload.home_team_id),
+      server.methods.teams.findById(payload.away_team_id)
+    ])
+    .then(function () {
+      return game.save(payload, { patch: true })
+      .then(function (game) {
+        return game.load(['home_team', 'away_team']);
+      });
+    });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
 
   server.route([{
     method: 'GET',
     path: '/games',
     config: {
       handler: function (request, reply) {
-        return reply(new Game().fetchAll({
-          withRelated: ['home_team', 'away_team']
-        }));
+        reply(server.methods.games.findAll());
       }
     }
   }, {
@@ -22,57 +80,24 @@ exports.register = function (server, options, next) {
     path: '/games/{id}',
     config: {
       handler: function (request, reply) {
-        return reply(new Game({ id: request.params.id })
-        .fetch({
-          require: true,
-          withRelated: ['home_team', 'away_team']
-        })
-        .catch(function (err) {
-          return Boom.notFound('game could not be found');
-        }));
+        reply(server.methods.games.findById(request.params.id));
       }
     }
   }, {
     method: 'POST',
     path: '/games',
     config: {
+      pre: [
+        { method: 'teams.findById(payload.home_team)', assign: 'home_team' },
+        { method: 'teams.findById(payload.away_team)', assign: 'away_team' },
+        { method: 'weeks.findById(payload.week)', assign: 'week' }
+      ],
       handler: function (request, reply) {
-        return reply(
-          Bluebird.all([
-            new Team({ id: request.payload.home_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('home_team could not be found');
-            }),
-            new Team({ id: request.payload.away_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('away_team could not be found');
-            }),
-            new Week({ id: request.payload.week })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('week could not be found');
-            })
-          ])
-          .spread(function (homeTeam, awayTeam, week) {
-            return new Game().save({
-              neutral_site: request.payload.neutral_site,
-              site: request.payload.site,
-              start_time: request.payload.start_time,
-              spread: request.payload.spread,
-              home_team_id: homeTeam.id,
-              away_team_id: awayTeam.id,
-              week_id: week.id
-            })
-            .then(function (game) {
-              return game.load([
-                'home_team',
-                'away_team'
-              ]);
-            });
-          })
-        );
+        request.payload.home_team = request.pre.home_team;
+        request.payload.away_team = request.pre.away_team;
+        request.payload.week = request.pre.week;
+
+        reply(server.methods.games.create(request.payload));
       },
       validate: {
         payload: {
@@ -90,47 +115,13 @@ exports.register = function (server, options, next) {
     method: 'POST',
     path: '/games/{id}',
     config: {
+      pre: [ { method: 'games.findById(params.id)', assign: 'game' } ],
       handler: function (request, reply) {
-        return reply(
-          Bluebird.all([
-            new Game({ id: request.params.id })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('game could not be found');
-            }),
-            request.payload.home_team && new Team({ id: request.payload.home_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('home_team could not be found');
-            }),
-            request.payload.away_team && new Team({ id: request.payload.away_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('away_team could not be found');
-            }),
-            request.payload.week && new Week({ id: request.payload.week })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('week could not be found');
-            })
-          ])
-          .spread(function (game, homeTeam, awayTeam, week) {
-            delete request.payload.home_team;
-            delete request.payload.away_team;
-            delete request.payload.week;
+        var game = request.pre.game;
+        request.payload.home_team_id = request.payload.home_team || game.related('home_team').id;
+        request.payload.away_team_id = request.payload.away_team || game.related('away_team').id;
 
-            var updateObject = request.payload;
-            if (homeTeam) { updateObject.home_team_id = homeTeam.id; }
-            if (awayTeam) { updateObject.away_team_id = awayTeam.id; }
-            if (week) { updateObject.week_id = week.id; }
-
-            return game.save(updateObject, { patch: true })
-            .then(function (game) {
-              return new Game({ id: request.params.id })
-              .fetch({ withRelated: ['home_team', 'away_team'] });
-            });
-          })
-        );
+        reply(server.methods.games.update(game, request.payload));
       },
       validate: {
         payload: {
@@ -139,8 +130,7 @@ exports.register = function (server, options, next) {
           start_time: Joi.date().optional(),
           spread: Joi.number().optional(),
           home_team: Joi.number().integer().optional(),
-          away_team: Joi.number().integer().optional(),
-          week: Joi.number().integer().optional()
+          away_team: Joi.number().integer().optional()
         }
       }
     }

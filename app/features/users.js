@@ -6,18 +6,30 @@ var Joi       = require('joi');
 exports.register = function (server, options, next) {
   var User = server.plugins.bookshelf.model('User');
 
-  server.method('users.findById', function (id) {
-    return new User({ id: id })
+  server.method('users.findById', function (id, next) {
+    var promise = new User({ id: id })
     .fetch({ require: true })
-    .catch(function () { return Boom.notFound('user could not be found'); });
+    .catch(function () { throw Boom.notFound('user could not be found'); });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
   });
 
-  server.method('users.findAll', function () {
-    return new User().fetchAll();
+  server.method('users.findAll', function (next) {
+    var promise = new User().fetchAll();
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
   });
 
-  server.method('users.create', function (payload) {
-    return Bluebird.promisify(Bcrypt.hash)(payload.password, 10)
+  server.method('users.create', function (payload, next) {
+    var promise = Bluebird.promisify(Bcrypt.hash)(payload.password, 10)
     .then(function (hash) {
       return new User().save({
         first_name: payload.first_name,
@@ -28,6 +40,12 @@ exports.register = function (server, options, next) {
         return new User({ id: user.id }).fetch();
       });
     });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
   });
 
   server.route([{

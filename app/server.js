@@ -33,12 +33,12 @@ server.register([
       }
     }
   },
+  { register: require('./features/users') },
   { register: require('./services/authentication') },
   { register: require('./features/teams') },
   { register: require('./features/weeks') },
   { register: require('./features/games') },
-  { register: require('./features/picks') },
-  { register: require('./features/users') }
+  { register: require('./features/picks') }
 ], function (err) {
   if (err) { throw err; }
 });

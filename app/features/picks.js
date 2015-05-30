@@ -8,14 +8,82 @@ exports.register = function (server, options, next) {
   var Team = server.plugins.bookshelf.model('Team');
   var User = server.plugins.bookshelf.model('User');
 
+  server.method('picks.findAll', function (next) {
+    var promise = new Pick()
+    .fetchAll({ withRelated: ['game', 'winning_team', 'losing_team'] });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
+  server.method('picks.findById', function (id, next) {
+    var promise = new Pick({ id: id })
+    .fetch({
+      require: true,
+      withRelated: ['game', 'winning_team', 'losing_team']
+    })
+    .catch(function (err) {
+      throw Boom.notFound('pick could not be found');
+    });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
+  server.method('picks.create', function (payload, next) {
+    var promise = new Pick().save({
+      game_id: payload.game.id,
+      user_id: payload.user.id,
+      winning_team_id: payload.winning_team.id,
+      losing_team_id: payload.losing_team.id,
+      best_bet: payload.best_bet
+    })
+    .then(function (pick) {
+      return pick.load([
+        'game',
+        'winning_team',
+        'losing_team'
+      ]);
+    });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
+  server.method('picks.update', function (pick, payload, next) {
+    var promise = Bluebird.all([
+      server.methods.teams.findById(payload.winning_team_id),
+      server.methods.teams.findById(payload.losing_team_id)
+    ])
+    .then(function () {
+      return pick.save(payload, { patch: true })
+      .then(function (pick) {
+        return pick.load(['game', 'winning_team', 'losing_team']);
+      });
+    });
+
+    if (next) {
+      next(promise);
+    } else {
+      return promise;
+    }
+  });
+
   server.route([{
     method: 'GET',
     path: '/picks',
     config: {
       handler: function (request, reply) {
-        return reply(new Pick().fetchAll({
-          withRelated: ['game', 'winning_team', 'losing_team']
-        }));
+        reply(server.methods.picks.findAll());
       }
     }
   }, {
@@ -23,61 +91,26 @@ exports.register = function (server, options, next) {
     path: '/picks/{id}',
     config: {
       handler: function (request, reply) {
-        return reply(new Pick({ id: request.params.id })
-        .fetch({
-          require: true,
-          withRelated: ['game', 'winning_team', 'losing_team']
-        })
-        .catch(function (err) {
-          return Boom.notFound('pick could not be found');
-        }));
+        reply(server.methods.picks.findById(request.params.id));
       }
     }
   }, {
     method: 'POST',
     path: '/picks',
     config: {
+      pre: [
+        { method: 'games.findById(payload.game)', assign: 'game' },
+        { method: 'users.findById(payload.user)', assign: 'user' },
+        { method: 'teams.findById(payload.winning_team)', assign: 'winning_team' },
+        { method: 'teams.findById(payload.losing_team)', assign: 'losing_team' }
+      ],
       handler: function (request, reply) {
-        return reply(
-          Bluebird.all([
-            new Game({ id: request.payload.game })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('game could not be found');
-            }),
-            new User({ id: request.payload.user })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('user could not be found');
-            }),
-            new Team({ id: request.payload.winning_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('winning_team could not be found');
-            }),
-            new Team({ id: request.payload.losing_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('losing_team could not be found');
-            })
-          ])
-          .spread(function (game, user, winningTeam, losingTeam) {
-            return new Pick().save({
-              game_id: game.id,
-              user_id: user.id,
-              winning_team_id: winningTeam.id,
-              losing_team_id: losingTeam.id,
-              best_bet: request.payload.best_bet
-            })
-            .then(function (pick) {
-              return pick.load([
-                'game',
-                'winning_team',
-                'losing_team'
-              ]);
-            });
-          })
-        );
+        request.payload.game = request.pre.game;
+        request.payload.user = request.pre.user;
+        request.payload.winning_team = request.pre.winning_team;
+        request.payload.losing_team = request.pre.losing_team;
+
+        reply(server.methods.picks.create(request.payload));
       },
       validate: {
         payload: {
@@ -93,62 +126,20 @@ exports.register = function (server, options, next) {
     method: 'POST',
     path: '/picks/{id}',
     config: {
+      pre: [ { method: 'picks.findById(params.id)', assign: 'pick' } ],
       handler: function (request, reply) {
-        return reply(
-          Bluebird.all([
-            new Pick({ id: request.params.id })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('pick could not be found');
-            }),
-            request.payload.game && new Game({ id: request.payload.game })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('game could not be found');
-            }),
-            request.payload.user && new User({ id: request.payload.user })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('user could not be found');
-            }),
-            request.payload.winning_team && new Team({ id: request.payload.winning_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('winning_team could not be found');
-            }),
-            request.payload.losing_team && new Team({ id: request.payload.losing_team })
-            .fetch({ require: true })
-            .catch(function () {
-              throw Boom.notFound('losing_team could not be found');
-            })
-          ])
-          .spread(function (pick, game, user, winningTeam, losingTeam) {
-            delete request.payload.game;
-            delete request.payload.user;
-            delete request.payload.winning_team;
-            delete request.payload.losing_team;
+        var pick = request.pre.pick;
 
-            var updateObject = request.payload;
-            if (game) { updateObject.game_id = game.id; }
-            if (user) { updateObject.user_id = user.id; }
-            if (winningTeam) { updateObject.winning_team_id = winningTeam.id; }
-            if (losingTeam) { updateObject.losing_team_id = losingTeam.id; }
+        request.payload.winning_team_id = request.payload.winning_team || pick.related('winning_team').id;
+        request.payload.losing_team_id = request.payload.losing_team || pick.related('losing_team').id;
 
-            return pick.save(updateObject, { patch: true })
-            .then(function (game) {
-              return new Pick({ id: request.params.id })
-              .fetch({ withRelated: ['game', 'winning_team', 'losing_team'] });
-            });
-          })
-        );
+        reply(server.methods.picks.update(pick, request.payload));
       },
       validate: {
         payload: {
           winning_team: Joi.number().integer().optional(),
           losing_team: Joi.number().integer().optional(),
-          game: Joi.number().integer().optional(),
-          user: Joi.number().integer().optional(),
-          best_bet: Joi.number().integer().optional()
+          best_bet: Joi.boolean().optional()
         }
       }
     }
