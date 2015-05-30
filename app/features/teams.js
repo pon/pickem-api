@@ -1,6 +1,4 @@
-var Bluebird    = require('bluebird');
 var Boom        = require('boom');
-var Joi         = require('joi');
 
 exports.register = function (server, options, next) {
 
@@ -41,6 +39,5 @@ exports.register = function (server, options, next) {
 };
 
 exports.register.attributes = {
-  name: 'teams',
-  version: '1.0.0'
+  name: 'teams'
 };

@@ -3,20 +3,39 @@ var Bcrypt    = require('bcrypt');
 var Boom      = require('boom');
 var Joi       = require('joi');
 
-/* jshint camelcase: false */
 exports.register = function (server, options, next) {
   var User = server.plugins.bookshelf.model('User');
+
+  server.method('users.findById', function (id) {
+    return new User({ id: id })
+    .fetch({ require: true })
+    .catch(function () { return Boom.notFound('user could not be found'); });
+  });
+
+  server.method('users.findAll', function () {
+    return new User().fetchAll();
+  });
+
+  server.method('users.create', function (payload) {
+    return Bluebird.promisify(Bcrypt.hash)(payload.password, 10)
+    .then(function (hash) {
+      return new User().save({
+        first_name: payload.first_name,
+        last_name: payload.last_name,
+        email: payload.email,
+        password: hash
+      }).then(function (user) {
+        return new User({ id: user.id }).fetch();
+      });
+    });
+  });
 
   server.route([{
     method: 'GET',
     path: '/users/{id}',
     config: {
       handler: function (request, reply) {
-        reply(new User({ id: request.params.id })
-        .fetch({ require: true })
-        .catch(function () {
-          return Boom.notFound('user could not be found');
-        }));
+        reply(server.methods.users.findById(request.params.id));
       }
     }
   },
@@ -25,7 +44,7 @@ exports.register = function (server, options, next) {
     path: '/users',
     config: {
       handler: function (request, reply) {
-        reply(new User().fetchAll());
+        reply(server.methods.users.findAll());
       }
     }
   }, {
@@ -33,17 +52,7 @@ exports.register = function (server, options, next) {
     path: '/users',
     config: {
       handler: function (request, reply) {
-        reply(Bluebird.promisify(Bcrypt.hash)(request.payload.password, 10)
-        .then(function (hash) {
-          return new User().save({
-            first_name: request.payload.first_name,
-            last_name: request.payload.last_name,
-            email: request.payload.email,
-            password: hash
-          }).then(function (user) {
-            return new User({ id: user.id }).fetch();
-          });
-        }));
+        reply(server.methods.users.create(request.payload));
       },
       validate: {
         payload: {
@@ -59,10 +68,7 @@ exports.register = function (server, options, next) {
     path: '/users/current',
     config: {
       handler: function (request, reply) {
-        reply(new User({ id: request.auth.credentials.id })
-        .fetch({
-          require: true
-        }));
+        reply(server.methods.users.findById(request.auth.credentials.id));
       }
     }
   }]);
@@ -73,4 +79,3 @@ exports.register.attributes = {
   name: 'users',
   version: '1.0.0'
 };
-/* jshint camelcase: true */
