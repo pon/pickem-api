@@ -69,6 +69,7 @@ exports.register = function (server, options, next) {
     method: 'POST',
     path: '/users',
     config: {
+      auth: false,
       handler: function (request, reply) {
         reply(server.methods.users.create(request.payload));
       },
