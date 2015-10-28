@@ -19,6 +19,9 @@ var server = new Hapi.Server({
 server.connection(config);
 
 server.register([
+  require('vision'),
+  require('inert'),
+  require('lout'),
   require('./services/serialize'),
   {
     register: require('hapi-bookshelf-models'),

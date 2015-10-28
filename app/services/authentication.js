@@ -6,7 +6,7 @@ var jwt     = require('jsonwebtoken');
 exports.register = function (server, options, next) {
   var User = server.plugins.bookshelf.model('User');
 
-  var validate = function (decodedToken, next) {
+  var validate = function (request, decodedToken, next) {
     new User({ id: decodedToken.user }).fetch({
       require: true
     })
