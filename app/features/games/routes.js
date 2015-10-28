@@ -1,78 +1,14 @@
-var Bluebird    = require('bluebird');
 var Boom        = require('boom');
 var Joi         = require('joi');
 
 exports.register = function (server, options, next) {
-  var Game = server.plugins.bookshelf.model('Game');
-
-  server.method('games.findAll', function (next) {
-    var promise = new Game().fetchAll({ withRelated: ['home_team', 'away_team'] });
-
-    if (next) {
-      next(promise);
-    } else {
-      return promise;
-    }
-  });
-
-  server.method('games.findById', function (id, next) {
-    var promise = new Game({ id: id })
-    .fetch({ require: true, withRelated: ['home_team', 'away_team'] })
-    .catch(function (err) { throw Boom.notFound('game could not be found'); });
-
-    if (next) {
-      next(promise);
-    } else {
-      return promise;
-    }
-  });
-
-  server.method('games.create', function (payload, next) {
-    var promise = new Game().save({
-      neutral_site: payload.neutral_site,
-      site: payload.site,
-      start_time: payload.start_time,
-      spread: payload.spread,
-      home_team_id: payload.home_team.id,
-      away_team_id: payload.away_team.id,
-      week_id: payload.week.id
-    })
-    .then(function (game) {
-      return game.load([ 'home_team', 'away_team' ]);
-    });
-
-    if (next) {
-      next(promise);
-    } else {
-      return promise;
-    }
-  });
-
-  server.method('games.update', function (game, payload, next) {
-    var promise = Bluebird.all([
-      server.methods.teams.findById(payload.home_team_id),
-      server.methods.teams.findById(payload.away_team_id)
-    ])
-    .then(function () {
-      return game.save(payload, { patch: true })
-      .then(function (game) {
-        return game.load(['home_team', 'away_team']);
-      });
-    });
-
-    if (next) {
-      next(promise);
-    } else {
-      return promise;
-    }
-  });
 
   server.route([{
     method: 'GET',
     path: '/games',
     config: {
       handler: function (request, reply) {
-        reply(server.methods.games.findAll());
+        server.methods.games.findAll(reply);
       }
     }
   }, {
@@ -80,7 +16,7 @@ exports.register = function (server, options, next) {
     path: '/games/{id}',
     config: {
       handler: function (request, reply) {
-        reply(server.methods.games.findById(request.params.id));
+        server.methods.games.findById(request.params.id, reply);
       }
     }
   }, {
@@ -97,7 +33,7 @@ exports.register = function (server, options, next) {
         request.payload.away_team = request.pre.away_team;
         request.payload.week = request.pre.week;
 
-        reply(server.methods.games.create(request.payload));
+        server.methods.games.create(request.payload, reply);
       },
       validate: {
         payload: {
@@ -121,7 +57,7 @@ exports.register = function (server, options, next) {
         request.payload.home_team_id = request.payload.home_team || game.related('home_team').id;
         request.payload.away_team_id = request.payload.away_team || game.related('away_team').id;
 
-        reply(server.methods.games.update(game, request.payload));
+        server.methods.games.update(game, request.payload, reply);
       },
       validate: {
         payload: {
@@ -140,6 +76,5 @@ exports.register = function (server, options, next) {
 };
 
 exports.register.attributes = {
-  name: 'games',
-  version: '1.0.0'
+  name: 'games.routes'
 };
